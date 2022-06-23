@@ -1,14 +1,14 @@
 # LatRAIVF
 
-# A-Disentangled-Representation-based-Brain-Image-Fusion-via-Group-Lasso-Penalty
+# 
 
 
-Project page of  "[A-Disentangled-Representation-based-Brain-Image-Fusion-via-Group-Lasso-Penalty](https://ieeexplore.ieee.org/document/9520770), IEEE Transactions on Instrumentation and Measurement, 70 (2021)"
+Project page of  "[LatRAIVF: An Infrared and Visible Image Fusion Method Based on Latent Regression and Adversarial Training](https://ieeexplore.ieee.org/document/9520770), IEEE Transactions on Instrumentation and Measurement, 70 (2021)"
 
 
 ### Usage
 ```bash
-# Replicate our method on fusing medical images
+# Replicate our method on fusing IR-VIS images
 python test.py
 ```
 
