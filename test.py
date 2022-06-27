@@ -96,7 +96,6 @@ class ImageSequence(data.Dataset):
 
 
 def _crop(img,ow,oh):
-    #ow, oh = raw_img.size #ow是水平方向，oh是竖直方向
     temp_arr = img[:,:,:oh,:ow]
 
     return temp_arr
@@ -146,18 +145,18 @@ net_enVI = networks.define_En_v0(1, 512, 64).cuda()
 net_de = networks.define_De_v0(512, 1, 64).cuda()
 
 
-model_En_path = "checkpoint/75_net_EnIR.pth"
+model_En_path = "models/75_net_EnIR.pth"
 
 
 state_dict_enIR = torch.load(model_En_path, map_location=str(device))
 load_(net_enIR,state_dict_enIR)
 
-model_En_path = "checkpoint/75_net_EnVI.pth"
+model_En_path = "models/75_net_EnVI.pth"
 
 state_dict_enVI = torch.load(model_En_path, map_location=str(device))
 load_(net_enVI,state_dict_enVI)
 
-model_De_path = "checkpoint/75_net_De.pth"
+model_De_path = "models/75_net_De.pth"
 
 state_dict_de = torch.load(model_De_path, map_location=str(device))
 load_(net_de,state_dict_de)
