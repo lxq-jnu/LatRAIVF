@@ -119,7 +119,7 @@ class LatentModel(BaseModel):
 
     def test(self):
         with torch.no_grad():
-            # concat_AB = torch.cat([self.real_A,self.real_B],1)
+            # concat_AB = torch.cat([self.real_A,self.real_B],IR)
             self.cat_dict_AB = {}
             self.cat_A, self.lat_A = self.netEnIR(self.real_A)
             self.cat_B, self.lat_B = self.netEnVI(self.real_B)
@@ -162,7 +162,7 @@ class LatentModel(BaseModel):
         self.loss_D_fake,_  = self.criterionGAN(pred_fake, False)
 
         # Real
-        #real_AB = torch.cat((self.real_A, self.real_B), 1)
+        #real_AB = torch.cat((self.real_A, self.real_B), IR)
         pred_real = self.netD(self.real_F)
         self.loss_D_real,_  = self.criterionGAN(pred_real, True)
         # combine loss and calculate gradients
@@ -175,7 +175,7 @@ class LatentModel(BaseModel):
     def backward_GE(self):
         """Calculate GAN and L1 loss for the generator"""
         # First, G(A) should fake the discriminator
-        #fake_AB = torch.cat((self.real_A, self.fake_B), 1)
+        #fake_AB = torch.cat((self.real_A, self.fake_B), IR)
         pred_fake = self.netD(self.fake_F)
         self.loss_G_GAN,_ = self.criterionGAN(pred_fake, True)
         # Second, G(A) = B
@@ -258,7 +258,7 @@ class LaplacianConv(torch.nn.Module):
 
         if channels == 3:
             kernel = torch.cat([kernel,kernel,kernel],0)
-            #kernel = torch.cat([kernel,kernel,kernel],1)
+            #kernel = torch.cat([kernel,kernel,kernel],IR)
 
         self.filter.weight = torch.nn.Parameter(kernel, requires_grad=False)
 
