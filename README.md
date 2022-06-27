@@ -18,7 +18,7 @@ python test.py
 If you find this code is useful for your research, please consider to cite our paper. 
 
 ```
-@ARTICLE{9520770,
+@ARTICLE{LuoTIM2021,
   author={Luo, Xiaoqing and Wang, Anqi and Zhang, Zhancheng and Xiang, Xinguang and Wu, Xiao-Jun},
   journal={IEEE Transactions on Instrumentation and Measurement}, 
   title={LatRAIVF: An Infrared and Visible Image Fusion Method Based on Latent Regression and Adversarial Training}, 
