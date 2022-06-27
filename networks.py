@@ -200,7 +200,7 @@ class D_NLayersMulti(nn.Module):
                                    kernel_size=kw, stride=1, padding=padw)),
             norm_layer(ndf * nf_mult),
             nn.LeakyReLU(0.2, True),
-            #Self_Attn(ndf * nf_mult,"lrelu")#新增注意力机制
+           
         ]
 
 
@@ -491,11 +491,7 @@ class TVLoss(nn.Module):
         return t.size()[1] * t.size()[2] * t.size()[3]
 
 
-# 计算SSIM
-# 直接使用SSIM的公式，但是在计算均值时，不是直接求像素平均值，而是采用归一化的高斯核卷积来代替。
-# 在计算方差和协方差时用到了公式Var(X)=E[X^2]-E[X]^2, cov(X,Y)=E[XY]-E[X]E[Y].
-# 正如前面提到的，上面求期望的操作采用高斯核卷积代替。
-# @torchsnooper.snoop()
+
 
 import torch
 import torch.nn.functional as F
@@ -531,10 +527,10 @@ def ssim(img1, img2, window_size=11, window=None, size_average=True, full=False,
     mu1_sq = mu1.pow(2)
     mu2_sq = mu2.pow(2)
     mu1_mu2 = mu1 * mu2
-    # 协方差期望公式：sigma_x=E（X^2）-（EX）^2
+
     sigma1_sq = F.conv2d(img1 * img1, window, padding=padd, groups=channel) - mu1_sq
     sigma2_sq = F.conv2d(img2 * img2, window, padding=padd, groups=channel) - mu2_sq
-    # 协方差期望公式：sigma_xy=E(XY）-（EX）*（EY）
+
     sigma12 = F.conv2d(img1 * img2, window, padding=padd, groups=channel) - mu1_mu2
 
     C1 = (0.01 * L) ** 2
@@ -556,23 +552,18 @@ def ssim(img1, img2, window_size=11, window=None, size_average=True, full=False,
     return ret
 
 
-# 计算一维的高斯分布向量
+
 def gaussian(window_size, sigma):
     gauss = torch.Tensor([exp(-(x - window_size // 2) ** 2 / float(2 * sigma ** 2)) for x in range(window_size)])
 
     return gauss / gauss.sum()
 
 
-# 创建高斯核，通过两个一维高斯分布向量进行矩阵乘法得到
-# 可以设定channel参数拓展为3通道
 def create_window(window_size, channel=1):
     _1D_window = gaussian(window_size, 1.5).unsqueeze(1)
-    # mm是计算两个矩阵/向量的乘积，（m，n）*(n,p)=(m,p)
-    # bmm多了一维b，即可以进行批矩阵/向量的乘积
-    # matual可以进行高维张量乘法，但是非矩阵的维度会被广播（前提是能广播的情况下）
-    # i.e.（j,1,n,m）*(k,m,p)=(j,k,n,p)
+
     _2D_window = _1D_window.mm(_1D_window.t()).float().unsqueeze(0).unsqueeze(0)
-    window = _2D_window.expand(channel, 1, window_size, window_size).contiguous()  # 通道扩展
+    window = _2D_window.expand(channel, 1, window_size, window_size).contiguous() 
     return window
 
 
@@ -656,8 +647,7 @@ class VGGLoss(nn.Module):
         return loss
 
 
-#################################################模型修改###############################################
-###############V0####################
+
 
 class Encoder_v0(nn.Module):
     def __init__(self, input_nc, outer_nc, ngf=64,
@@ -809,7 +799,7 @@ def define_En_v0(input_nc, output_nc, ngf, netG='unet_128', norm='instance', nl=
     net = Encoder_v0(input_nc, output_nc, ngf, norm_layer=norm_layer, nl_layer=nl_layer,
                      upsample=upsample, padding_type=padding_type)
 
-    return init_net_test(net, init_type, init_gain)  # 返回经过初始化的网络
+    return init_net_test(net, init_type, init_gain)  
 
 
 def define_De_v0(input_nc, output_nc, ngf, netG='unet_128', norm='instance', nl='lrelu',
@@ -825,6 +815,6 @@ def define_De_v0(input_nc, output_nc, ngf, netG='unet_128', norm='instance', nl=
     net = Decoder_v0(input_nc, output_nc, ngf, norm_layer=norm_layer, nl_layer=nl_layer,
                      upsample=upsample, padding_type=padding_type)
 
-    return init_net_test(net, init_type, init_gain)  # 返回经过初始化的网络
+    return init_net_test(net, init_type, init_gain)  
 
 
